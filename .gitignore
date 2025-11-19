@@ -1,0 +1,21 @@
+.env
+# Build artifacts
+*.exe
+*.dll
+*.pdb
+
+# Visual Studio files
+.vs/
+bin/
+obj/
+
+# NuGet packages
+packages/
+node_modules/
+
+
+# Rider files
+.idea/
+
+# Misc
+logs/
