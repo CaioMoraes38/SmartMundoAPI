@@ -143,12 +143,3 @@ Retorna o lucro agregado (diário, semanal, mensal ou total). Aceita query param
 GET
 
 Retorna o resumo atual do estoque por loja e o valor de custo total.
-
-🔒 Considerações de Segurança
-
-⚠ ATENÇÃO CRÍTICA (Login):
-O campo password_hash da tabela app_users está sendo preenchido no Repositório com a senha em texto puro (params.password).
-
-Para a produção, você DEVE instalar e usar o bcrypt no seu SupabaseCreateUserRepository e LoginController para criar e comparar hashes de senha de forma segura:
-
-npm install bcrypt @types/bcrypt
