@@ -3,7 +3,6 @@ import { Product } from "../../../models/products";
 import { CreateProductParams, ICreateProductController, ICreateProductRepository } from "./protocol";
 
 export class CreateProductController implements ICreateProductController {
-    // Injeção de dependência do repositório
     constructor(private readonly createProductRepository: ICreateProductRepository) {}
 
     async handle(
@@ -12,7 +11,6 @@ export class CreateProductController implements ICreateProductController {
         try {
             const payload = httpRequest.body;
 
-            // Validação de campos obrigatórios
             if (!payload || !payload.name || typeof payload.suggested_price !== 'number' || typeof payload.min_price !== 'number' || !payload.category_id) {
                 return {
                     statusCode: 400,
@@ -31,10 +29,9 @@ export class CreateProductController implements ICreateProductController {
         } catch (error: any) {
             console.error("ERRO NO CONTROLLER DE PRODUTO:", error);
 
-            // Tenta retornar erros específicos, como duplicidade de código de barras
             if (error.message.includes("barcode")) {
                 return {
-                    statusCode: 409, // Conflict
+                    statusCode: 409, 
                     body: "O código de barras fornecido já está em uso.",
                 };
             }

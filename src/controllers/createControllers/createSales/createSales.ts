@@ -11,7 +11,6 @@ export class CreateSaleController implements ICreateSaleController {
         try {
             const payload = httpRequest.body;
 
-            // Validação de campos obrigatórios
             if (!payload || !payload.store_id || !payload.items || payload.items.length === 0) {
                 return {
                     statusCode: 400,
@@ -29,21 +28,20 @@ export class CreateSaleController implements ICreateSaleController {
                 }
             }
 
-            // Processa a transação de venda e baixa de estoque
             const newSale = await this.createSaleRepository.createSaleTransaction(payload);
 
             return {
-                statusCode: 201, // Created
+                statusCode: 201, 
                 body: newSale,
             };
 
         } catch (error: any) {
             console.error("ERRO NO CONTROLLER DE VENDA:", error);
             
-            // Retorna o erro específico do repositório
+           
             if (error.message.includes('Unidade de estoque')) {
                 return {
-                    statusCode: 409, // Conflito de estoque
+                    statusCode: 409, 
                     body: error.message,
                 };
             }

@@ -13,7 +13,6 @@ export class CreateStockUnitController implements ICreateStockUnitController {
         try {
             const payload = httpRequest.body;
 
-            // Validação de campos obrigatórios
             if (!payload || !payload.product_id || !payload.store_id || typeof payload.cost_price !== 'number' || !payload.status) {
                 return {
                     statusCode: 400,
@@ -21,7 +20,6 @@ export class CreateStockUnitController implements ICreateStockUnitController {
                 };
             }
             
-            // Validação do ESTADO FIXO (ENUM)
             if (!VALID_STATUSES.includes(payload.status)) {
                 return {
                     statusCode: 400,
@@ -29,11 +27,10 @@ export class CreateStockUnitController implements ICreateStockUnitController {
                 };
             }
 
-            // Cria a unidade em estoque, atrelando o estado e o custo ao produto
             const newStockUnit = await this.createStockUnitRepository.createStockUnit(payload);
 
             return {
-                statusCode: 201, // Created
+                statusCode: 201, 
                 body: newStockUnit,
             };
 
