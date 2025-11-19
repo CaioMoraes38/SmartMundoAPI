@@ -1,59 +1,154 @@
-# SmartMundoAPI
+📦 SmartMundoAPI - Sistema de Controle de Estoque Multi-Loja
 
-This repository contains the backend API for the SmartMundo project.
+Esta é uma API de backend robusta desenvolvida em Node.js com Express e TypeScript, utilizando o Supabase como banco de dados principal. O projeto segue o padrão de arquitetura Controller-Repository-Service para garantir escalabilidade, testabilidade e separação de responsabilidades.
 
-## Project Description
+🌟 Funcionalidades Principais
 
-SmartMundo is a comprehensive platform designed to manage and monitor various aspects of a smart environment. This API serves as the central hub for data management, business logic, and communication with different components of the SmartMundo ecosystem.
+O sistema foi projetado para gerenciar um inventário de compra e venda de produtos, com foco em rastreamento unitário e contabilidade de lucro detalhada.
 
-## Technologies Used
+Multi-Loja: Suporte a várias lojas (stores).
 
-*   **ASP.NET Core:** For building robust and scalable web APIs.
-*   **Entity Framework Core:** For object-relational mapping (ORM) and database interactions.
-*   **SQL Server:** As the primary database for storing application data.
-*   **Swagger/OpenAPI:** For API documentation and testing.
-*   **JWT (JSON Web Tokens):** For authentication and authorization.
+Rastreamento Unitário: Cada item em estoque é uma stock_unit única, com seu próprio custo (cost_price) e estado (status).
 
-## Features
+Autenticação: Login simples com app_users (requer hashing seguro com bcrypt).
 
-*   **User Management:** Registration, login, and profile management.
-*   **Device Management:** Registering, configuring, and monitoring smart devices.
-*   **Sensor Data Collection:** Receiving and storing data from various sensors.
-*   **Automation Rules:** Defining and executing automated actions based on sensor data.
-*   **Notifications:** Sending alerts and notifications to users.
-*   **Role-Based Access Control (RBAC):** Managing user permissions.
+Transações: Baixa automática de estoque na venda e cálculo de lucro por item.
 
-## Getting Started
+Relatórios: Consulta de lucro e resumo de estoque em tempo real.
 
-### Prerequisites
+🛠️ Tecnologias Utilizadas
 
-*   .NET SDK (version 8.0 or later)
-*   SQL Server (or a compatible database)
-*   Visual Studio or Visual Studio Code (recommended IDE)
+Backend: Node.js, Express.js
 
-### Installation
+Linguagem: TypeScript
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/SmartMundoAPI.git
-    cd SmartMundoAPI
-    ```
+Banco de Dados: PostgreSQL (via Supabase)
 
-2.  **Configure the database connection string:**
-    Open `appsettings.json` (and `appsettings.Development.json`) and update the `DefaultConnection` string to point to your SQL Server instance.
+Acesso ao DB: @supabase/supabase-js
 
-    ```json
-    "ConnectionStrings": {
-      "DefaultConnection": "Server=your_server_name;Database=SmartMundoDB;User Id=your_username;Password=your_password;TrustServerCertificate=True;"
-    }
-    ```
+Ferramentas: dotenv, ts-node
 
-3.  **Apply database migrations:**
-    Open a terminal in the project root and run the following commands:
+⚙️ Configuração e Instalação
 
-    ```bash
-    dotnet ef database update
-    ```
+Siga estes passos para configurar e rodar o projeto localmente.
 
-4.  **Run the application:**
-    
+1. Pré-requisitos
+
+Node.js (versão 18+)
+
+Uma instância de projeto no Supabase.
+
+Base de dados inicializada com o inventory_schema.sql.
+
+2. Instalação de Dependências
+
+npm install
+
+
+3. Configuração de Variáveis de Ambiente
+
+Crie um arquivo chamado .env na raiz do projeto e preencha-o com suas chaves do Supabase.
+
+Atenção: Use a Service Role Key para o backend, pois ela permite acesso irrestrito ao banco (necessário para o login e a baixa de estoque).
+
+# Conteúdo do arquivo .env
+SUPABASE_URL="[SUA URL DO PROJETO SUPABASE AQUI]"
+SUPABASE_SERVICE_ROLE_KEY="[SUA SERVICE ROLE KEY AQUI]"
+PORT=3000
+
+
+4. Inicialização do Servidor
+
+Rode o servidor Express no modo de desenvolvimento com ts-node:
+
+npm start
+
+
+O servidor estará rodando em http://localhost:3000.
+
+🗄️ Estrutura da Arquitetura
+
+O projeto utiliza o padrão Controller/Repository:
+
+src/database/supabase.ts: Inicializa o cliente Supabase.
+
+src/models/: Define as interfaces TypeScript para as tabelas (e.g., Product, StockUnit).
+
+src/controllers/: Camada que lida com a requisição HTTP (req, res), valida o payload e chama o repositório.
+
+src/repositories/: Camada que contém a lógica de acesso direto ao Supabase (.from('tabela').select(...)).
+
+index.ts: Ponto de entrada que configura as rotas e injeta as dependências.
+
+🗺️ Endpoints da API
+
+Todos os endpoints utilizam a base http://localhost:3000/.
+
+Rota
+
+Método
+
+Descrição
+
+/login
+
+POST
+
+Autentica um usuário e retorna dados seguros (requer username, password).
+
+/users
+
+POST
+
+Cria um novo usuário (name, userName, password).
+
+/categories
+
+POST
+
+Cria uma nova categoria (name, description).
+
+/categories
+
+GET
+
+Lista todas as categorias.
+
+/products
+
+POST
+
+Cria a Ficha Mestra do Produto (name, suggested_price, min_price, category_id).
+
+/stock-units
+
+POST
+
+Registra a entrada de uma unidade no estoque, atrelando product_id, store_id, cost_price e status.
+
+/sales
+
+POST
+
+Processa uma transação de venda. Requer store_id e um array de items (com stock_unit_id e selling_price). Executa a baixa de estoque.
+
+/reports/profit
+
+GET
+
+Retorna o lucro agregado (diário, semanal, mensal ou total). Aceita query params como ?periodType=month ou ?storeId=[UUID].
+
+/reports/stock-summary
+
+GET
+
+Retorna o resumo atual do estoque por loja e o valor de custo total.
+
+🔒 Considerações de Segurança
+
+⚠ ATENÇÃO CRÍTICA (Login):
+O campo password_hash da tabela app_users está sendo preenchido no Repositório com a senha em texto puro (params.password).
+
+Para a produção, você DEVE instalar e usar o bcrypt no seu SupabaseCreateUserRepository e LoginController para criar e comparar hashes de senha de forma segura:
+
+npm install bcrypt @types/bcrypt
