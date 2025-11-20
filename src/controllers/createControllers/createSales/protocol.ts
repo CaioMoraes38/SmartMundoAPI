@@ -13,3 +13,5 @@ export interface ICreateSaleController {
 export interface ICreateSaleRepository {
     createSaleTransaction(params: CreateSaleParams): Promise<Sale>;
 }
+
+export { Sale };

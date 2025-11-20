@@ -18,11 +18,10 @@ export class CreateProductController implements ICreateProductController {
                 };
             }
 
-            // Cria a ficha mestra do produto no banco
             const newProduct = await this.createProductRepository.createProduct(payload);
 
             return {
-                statusCode: 201, // Created
+                statusCode: 201, 
                 body: newProduct,
             };
 

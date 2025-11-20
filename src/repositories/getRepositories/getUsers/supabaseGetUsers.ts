@@ -1,6 +1,6 @@
-import { IGetUsersRepository } from "../../controllers/getControllers/getUsers/protocols";
-import { User } from "../../models/user";
-import { supabase } from "../../database/supabase";
+import { IGetUsersRepository } from "../../../controllers/getControllers/getUsers/protocols";
+import { User } from "../../../models/user";
+import { supabase } from "../../../database/supabase";
 
 export class SupabaseUsersRepository implements IGetUsersRepository {
     async getUsers(): Promise<User[]> {
