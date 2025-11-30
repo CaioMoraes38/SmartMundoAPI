@@ -1,8 +1,8 @@
-📦 SmartMundoAPI - Sistema de Controle de Estoque Multi-Loja
+# 📦 SmartMundoAPI - Sistema de Controle de Estoque Multi-Loja
 
 Esta é uma API de backend robusta desenvolvida em Node.js com Express e TypeScript, utilizando o Supabase como banco de dados principal. O projeto segue o padrão de arquitetura Controller-Repository-Service para garantir escalabilidade, testabilidade e separação de responsabilidades.
 
-🌟 Funcionalidades Principais
+# 🌟 Funcionalidades Principais
 
 O sistema foi projetado para gerenciar um inventário de compra e venda de produtos, com foco em rastreamento unitário e contabilidade de lucro detalhada.
 
@@ -16,7 +16,7 @@ Transações: Baixa automática de estoque na venda e cálculo de lucro por item
 
 Relatórios: Consulta de lucro e resumo de estoque em tempo real.
 
-🛠️ Tecnologias Utilizadas
+# 🛠️ Tecnologias Utilizadas
 
 Backend: Node.js, Express.js
 
@@ -28,7 +28,7 @@ Acesso ao DB: @supabase/supabase-js
 
 Ferramentas: dotenv, ts-node
 
-⚙️ Configuração e Instalação
+# ⚙️ Configuração e Instalação
 
 Siga estes passos para configurar e rodar o projeto localmente.
 
@@ -66,7 +66,7 @@ npm start
 
 O servidor estará rodando em http://localhost:3000.
 
-🗄️ Estrutura da Arquitetura
+# 🗄️ Estrutura da Arquitetura
 
 O projeto utiliza o padrão Controller/Repository:
 
@@ -80,7 +80,7 @@ src/repositories/: Camada que contém a lógica de acesso direto ao Supabase (.f
 
 index.ts: Ponto de entrada que configura as rotas e injeta as dependências.
 
-🗺️ Endpoints da API
+# 🗺️ Endpoints da API
 
 Todos os endpoints utilizam a base http://localhost:3000/.
 
